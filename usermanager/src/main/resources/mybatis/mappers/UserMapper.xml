@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 映射文件的根标签。namespace：名称空间或者命名空间。全局的唯一标志。使用动态代理之后，要求和mapper接口的全路径一致 -->
+<mapper namespace="com.atguigu.usermanage.mapper.UserMapper">
+
+	<select id="queryUserById" resultType="User">
+		select * from tb_user where id=#{id}
+	</select>
+	<select id="queryCount" resultType="long">
+		select count(*) from tb_user
+	</select>
+	<select id="queryUserAll" resultType="User">
+		select * from tb_user
+	</select>
+	
+	<insert id="insertUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		INSERT INTO tb_user (
+			user_name,
+			password,
+			name,
+			age,
+			sex,
+			birthday,
+			created,
+			updated
+		)
+		VALUES
+			(
+				#{userName},
+				#{password},
+				#{name},
+				#{age},
+				#{sex},
+				#{birthday},
+				NOW(),
+				NOW()
+			);
+	</insert>
+	
+	<update id="editUser" parameterType="User">
+		UPDATE tb_user
+		SET
+		 user_name = #{userName},
+		 password = #{password},
+		 name = #{name},
+		 age = #{age},
+		 sex = #{sex},
+		 birthday = #{birthday},
+		 updated = NOW()
+		WHERE
+			(id = #{id});
+	</update>
+	
+	<delete id="deleteUser">
+		delete from tb_user where id in
+		<foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
+	</delete>
+	
+	<delete id="deleteUserById">
+		delete from tb_user where id=#{id}
+	</delete>
+	
+</mapper>
